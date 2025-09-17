@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="da"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NoteService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CRUD_application</a> &gt; <a href="index.source.html" class="el_package">com.example.Services</a> &gt; <span class="el_source">NoteService.java</span></div><h1>NoteService.java</h1><pre class="source lang-java linenums">package com.example.Services;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.DB.db_con;
+import com.example.Models.Note;
+
+<span class="fc" id="L13">public class NoteService {</span>
+    
+
+    // Crud operations for Note entity would go here
+
+    // CREATE
+    public void createNote(Note note) {
+<span class="nc" id="L20">        isNoteValid(note);</span>
+<span class="nc" id="L21">        String SQL = &quot;INSERT INTO note (title, content) VALUES (?, ?)&quot;;</span>
+
+<span class="nc" id="L23">        try(Connection conn = db_con.getConnection();</span>
+<span class="nc" id="L24">            PreparedStatement pstmt = conn.prepareStatement(SQL)) {</span>
+
+<span class="nc" id="L26">            pstmt.setString(1, note.getNote_title());</span>
+<span class="nc" id="L27">            pstmt.setString(2, note.getNote_description());</span>
+<span class="nc" id="L28">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L30">        } catch (SQLException e) {</span>
+<span class="nc" id="L31">            System.out.println(e.getMessage());</span>
+<span class="nc" id="L32">        }</span>
+<span class="nc" id="L33">    }</span>
+
+    // READ
+    public Note getNoteById(Long id) {
+<span class="nc" id="L37">        String SQL = &quot;SELECT * FROM note WHERE id = ?&quot;;</span>
+<span class="nc" id="L38">        Note note = null;</span>
+
+<span class="nc" id="L40">        try(Connection conn = db_con.getConnection();</span>
+<span class="nc" id="L41">            PreparedStatement pstmt = conn.prepareStatement(SQL)) {</span>
+
+<span class="nc" id="L43">            pstmt.setLong(1, id);</span>
+<span class="nc" id="L44">            ResultSet rs = pstmt.executeQuery();</span>
+
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L47">                note = new Note(</span>
+<span class="nc" id="L48">                    rs.getLong(&quot;id&quot;),</span>
+<span class="nc" id="L49">                    rs.getString(&quot;title&quot;),</span>
+<span class="nc" id="L50">                    rs.getString(&quot;content&quot;),</span>
+<span class="nc" id="L51">                    rs.getTimestamp(&quot;created_at&quot;)</span>
+                );
+            }
+
+<span class="nc" id="L55">        } catch (SQLException e) {</span>
+<span class="nc" id="L56">            System.out.println(e.getMessage());</span>
+<span class="nc" id="L57">        }</span>
+
+<span class="nc" id="L59">        return note;</span>
+    }
+
+
+    // Validate note is not empty
+
+    public void isNoteValid(Note note) {
+<span class="pc bpc" id="L66" title="2 of 4 branches missed.">        if (note.getNote_title() == null || note.getNote_title().trim().isEmpty()) {</span>
+<span class="fc" id="L67">            throw new IllegalArgumentException(&quot;Title cannot be empty&quot;);</span>
+        }
+<span class="nc bnc" id="L69" title="All 4 branches missed.">        if (note.getNote_description() == null || note.getNote_description().trim().isEmpty()) {</span>
+<span class="nc" id="L70">            throw new IllegalArgumentException(&quot;Description cannot be empty&quot;);</span>
+        }
+<span class="nc" id="L72">    }</span>
+
+    // UPDATE
+    public void updateNote(Note note) {
+<span class="nc" id="L76">        isNoteValid(note);</span>
+<span class="nc" id="L77">        String SQL = &quot;UPDATE note SET title = ?, content = ? WHERE id = ?&quot;;</span>
+
+<span class="nc" id="L79">        try(Connection conn = db_con.getConnection();</span>
+<span class="nc" id="L80">            PreparedStatement pstmt = conn.prepareStatement(SQL)) {</span>
+
+<span class="nc" id="L82">            pstmt.setString(1, note.getNote_title());</span>
+<span class="nc" id="L83">            pstmt.setString(2, note.getNote_description());</span>
+<span class="nc" id="L84">            pstmt.setLong(3, note.getNote_id());</span>
+<span class="nc" id="L85">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L87">        } catch (SQLException e) {</span>
+<span class="nc" id="L88">            System.out.println(e.getMessage());</span>
+<span class="nc" id="L89">        }</span>
+<span class="nc" id="L90">    }</span>
+
+
+    // DELETE
+    public void deleteNoteById(Long id) {
+<span class="nc" id="L95">        String SQL = &quot;DELETE FROM note WHERE id = ?&quot;;</span>
+
+<span class="nc" id="L97">        try(Connection conn = db_con.getConnection();</span>
+<span class="nc" id="L98">            PreparedStatement pstmt = conn.prepareStatement(SQL)) {</span>
+
+<span class="nc" id="L100">            pstmt.setLong(1, id);</span>
+<span class="nc" id="L101">            pstmt.executeUpdate();</span>
+
+<span class="nc" id="L103">        } catch (SQLException e) {</span>
+<span class="nc" id="L104">            System.out.println(e.getMessage());</span>
+<span class="nc" id="L105">        }</span>
+<span class="nc" id="L106">    }</span>
+
+
+    // GET ALL NODES
+
+    public List&lt;Note&gt; getAllNotes() {
+<span class="nc" id="L112">        String SQL = &quot;SELECT * FROM note&quot;;</span>
+<span class="nc" id="L113">        List&lt;Note&gt; notes = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L115">        try(Connection conn = db_con.getConnection();</span>
+<span class="nc" id="L116">            PreparedStatement pstmt = conn.prepareStatement(SQL);</span>
+<span class="nc" id="L117">            ResultSet rs = pstmt.executeQuery()) {</span>
+
+<span class="nc bnc" id="L119" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L120">                Note note = new Note(</span>
+<span class="nc" id="L121">                    rs.getLong(&quot;id&quot;),</span>
+<span class="nc" id="L122">                    rs.getString(&quot;title&quot;),</span>
+<span class="nc" id="L123">                    rs.getString(&quot;content&quot;),</span>
+<span class="nc" id="L124">                    rs.getTimestamp(&quot;created_at&quot;)</span>
+                );
+<span class="nc" id="L126">                notes.add(note);</span>
+<span class="nc" id="L127">            }</span>
+
+<span class="nc" id="L129">        } catch (SQLException e) {</span>
+<span class="nc" id="L130">            System.out.println(e.getMessage());</span>
+<span class="nc" id="L131">        }</span>
+
+<span class="nc" id="L133">        return notes;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,6 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+CRUD_application,com.example.Models,Note,32,14,0,0,13,7,6,4,6,4
+CRUD_application,com.example,Main,29,0,0,0,7,0,5,0,5,0
+CRUD_application,com.example.DB,db_con,8,0,0,0,2,0,2,0,2,0
+CRUD_application,com.example.Services,NoteService,199,16,10,2,68,3,11,2,5,2
+CRUD_application,com.example.Controllers,NoteController,124,0,2,0,31,0,8,0,7,0
