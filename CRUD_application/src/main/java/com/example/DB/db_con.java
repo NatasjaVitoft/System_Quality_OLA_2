@@ -10,7 +10,12 @@ public class db_con {
     private static final String USER = "root"; 
     private static final String PASSWORD = "1234"; 
 
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+    public static Connection getConnection() {
+        try {
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (SQLException e) {
+            // Wrap it in an unchecked exception
+            throw new RuntimeException("Failed to connect to the database", e);
+        }
     }
 }

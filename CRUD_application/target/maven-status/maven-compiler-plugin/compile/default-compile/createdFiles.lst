@@ -1,5 +1,0 @@
-com\example\Models\Note.class
-com\example\Main.class
-com\example\Services\NoteService.class
-com\example\Controllers\NoteController.class
-com\example\DB\db_con.class

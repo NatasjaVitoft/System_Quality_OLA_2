@@ -1,7 +1,9 @@
 package com.example.Controllers;
 
+import java.sql.Connection;
 import java.util.List;
 
+import com.example.DB.db_con;
 import com.example.Models.Note;
 import com.example.Services.AuthenticationService;
 import com.example.Services.NoteService;
@@ -10,11 +12,21 @@ import io.javalin.Javalin;
 
 public class NoteController {
 
-    private final NoteService noteService = new NoteService();
+    // Database connection 
+
+    Connection conn = db_con.getConnection();
+
+    private final NoteService noteService = new NoteService(conn);
     private final AuthenticationService authenticationService = new AuthenticationService();
 
     // This method will register all endpoints on the app
     public void registerRoutes(Javalin app) {
+
+
+        // Home
+        app.post("/", ctx -> {
+            ctx.result("Notes");
+        });
 
         // Create Note
         app.post("/api/notes", ctx -> {
@@ -59,6 +71,10 @@ public class NoteController {
             noteService.deleteNoteById(id);
             ctx.json("{\"message\":\"Note deleted\"}");
         });
+    }
+
+    public Connection getConn() {
+        return conn;
     }
 }
 

@@ -9,14 +9,9 @@ public class Note {
     private String note_description;
     private Timestamp created_at;
 
-
-    // Empty constructor
-
     public Note() {
 
     }
-
-    // Constructor with parameters
 
     public Note(Long note_id, String note_title, String note_description, Timestamp created_at) {
         this.note_id = note_id;
@@ -24,8 +19,6 @@ public class Note {
         this.note_description = note_description;
         this.created_at = created_at;
     }
-
-    // Getters and Setters
 
     public Long getNote_id() {
         return note_id;

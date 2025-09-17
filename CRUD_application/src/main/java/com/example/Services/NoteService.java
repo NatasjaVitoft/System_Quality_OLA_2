@@ -7,22 +7,32 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.DB.db_con;
 import com.example.Models.Note;
 
 public class NoteService {
-    
+
+    // Connection
+
+    private Connection conn;
+
+    public NoteService() {
+        // For testing purposes
+    }
+
+    public NoteService(Connection conn) {
+        this.conn = conn;
+    }
 
     // Crud operations for Note entity would go here
 
     // CREATE
     public void createNote(Note note, Long userId) {
+        
         isNoteValid(note); 
 
         String SQL = "INSERT INTO note (user_id, title, content) VALUES (?, ?, ?)";
 
-        try (Connection conn = db_con.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
 
             pstmt.setLong(1, userId); 
             pstmt.setString(2, note.getNote_title());
@@ -40,8 +50,7 @@ public class NoteService {
         String SQL = "SELECT * FROM note WHERE id = ?";
         Note note = null;
 
-        try(Connection conn = db_con.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+        try(PreparedStatement pstmt = conn.prepareStatement(SQL)) {
 
             pstmt.setLong(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -75,14 +84,14 @@ public class NoteService {
     }
 
     // UPDATE
+
     public void updateNote(Note note) {
         
         isNoteValid(note);
-        
+
         String SQL = "UPDATE note SET title = ?, content = ? WHERE id = ?";
 
-        try(Connection conn = db_con.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+        try(PreparedStatement pstmt = conn.prepareStatement(SQL)) {
 
             pstmt.setString(1, note.getNote_title());
             pstmt.setString(2, note.getNote_description());
@@ -99,8 +108,7 @@ public class NoteService {
     public void deleteNoteById(Long id) {
         String SQL = "DELETE FROM note WHERE id = ?";
 
-        try(Connection conn = db_con.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+        try(PreparedStatement pstmt = conn.prepareStatement(SQL)) {
 
             pstmt.setLong(1, id);
             pstmt.executeUpdate();
@@ -117,8 +125,7 @@ public class NoteService {
         String SQL = "SELECT * FROM note";
         List<Note> notes = new ArrayList<>();
 
-        try(Connection conn = db_con.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
+        try(PreparedStatement pstmt = conn.prepareStatement(SQL);
             ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {

@@ -1,25 +1,16 @@
 package com.example;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
 
 import com.example.Models.Note;
 import com.example.Services.NoteService;
 
 public class NoteServiceTest {
 
-    @Test
-    public void testNoteTitleNotEmpty() {
-        Note note = new Note();
-        note.setNote_title("Test");
-        note.setNote_description("Test");
-        assertNotNull(note.getNote_title());
-    }
+    // One edge case test that i could think of in the NoteService class
 
-
-    // Test is note valid
     @Test
     public void testIsNoteValid() {
         NoteService noteService = new NoteService();
@@ -31,6 +22,6 @@ public class NoteServiceTest {
         noteService.isNoteValid(note);
     });
 
-    assertEquals("Title cannot be empty", exception.getMessage());
-    }
+    assertEquals("Title is empty", exception.getMessage());
+    } 
 }

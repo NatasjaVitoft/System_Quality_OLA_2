@@ -10,7 +10,7 @@ import com.example.DB.db_con;
 public class AuthenticationService {
     
 
-// AUTHENTICATION METHOD FOR POSTMAN
+// AUTHENTICATION METHOD FOR POSTMAN (WORK IN PROGRESS)
 
     public Long authenticateUser (io.javalin.http.Context ctx) throws SQLException {
         String authHeader = ctx.header("Authorization");
